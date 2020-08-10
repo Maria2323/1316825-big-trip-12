@@ -1,9 +1,14 @@
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger, getRandomInt} from "../utils.js";
 import {types, cities, descriptions} from "../const.js";
+import {generateOffer} from "./offers";
 
 const generateType = () => {
   const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex];
+  return types[randomIndex].name + types[randomIndex].article;
+};
+
+const generatePrice = () => {
+  return Math.ceil(getRandomInt(30, 150));
 };
 
 const generateCity = () => {
@@ -27,9 +32,14 @@ const generatePhoto = () => {
 
 export const generateEvent = () => {
   return {
-    description: generateDescription(),
     type: generateType(),
     city: generateCity(),
-    image: generatePhoto(),
+    offer: generateOffer(),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    price: generatePrice(),
+    destination: {
+      image: generatePhoto(),
+      description: generateDescription(),
+    },
   };
 };

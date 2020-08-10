@@ -1,5 +1,5 @@
-import {getRandomInteger} from "../utils";
-import {cities, types} from "../const";
+import {getRandomInt, getRandomInteger} from "../utils";
+import {cities, types, offers} from "../const";
 
 const typesTransfer = [
   `Taxi`,
@@ -15,14 +15,6 @@ const typesActivity = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
-];
-
-const offers = [
-  {name: `Choose seats`, price: 30, className: `seats`},
-  {name: `Add meal`, price: 40, className: `meal`},
-  {name: `Travel by train`, price: 50, className: `train`},
-  {name: `Switch to comfort class`, price: 70, className: `comfort`},
-  {name: `Add luggage`, price: 80, className: `luggage`},
 ];
 
 const createEventEditOfferTemplate = (currentOffer) => {
@@ -56,7 +48,7 @@ const generateCity = () => {
 
 const generateType = () => {
   const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex];
+  return types[randomIndex].name + types[randomIndex].article;
 };
 
 export const createEventEditTemplate = (event = {}) => {
@@ -65,6 +57,7 @@ export const createEventEditTemplate = (event = {}) => {
     city = generateCity(),
     image = `http://picsum.photos/248/152?r=${Math.random()}`,
     offer = ``,
+    price = Math.ceil(getRandomInt(30, 180)),
   } = event;
 
   const offerTemplate = createEventEditOfferTemplate(offer);
@@ -101,7 +94,7 @@ export const createEventEditTemplate = (event = {}) => {
 
                       <div class="event__field-group  event__field-group--destination">
                         <label class="event__label  event__type-output" for="event-destination-1">
-                           ${type} to
+                           ${type}
                         </label>
                         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
                         <datalist id="destination-list-1">
@@ -125,10 +118,10 @@ export const createEventEditTemplate = (event = {}) => {
 
                       <div class="event__field-group  event__field-group--price">
                         <label class="event__label" for="event-price-1">
-                          <span class="visually-hidden">Price</span>
+                          <span class="visually-hidden">price</span>
                           &euro;
                         </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
                       </div>
 
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

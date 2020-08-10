@@ -1,22 +1,22 @@
 export const types = [
-  `Taxi`,
-  `Bus`,
-  `Train`,
-  `Ship`,
-  `Transport`,
-  `Drive`,
-  `Flight`,
-  `Check-in`,
-  `Sightseeing`,
-  `Restaurant`,
+  {name: `Taxi`, article: ` to`},
+  {name: `Bus`, article: ` to`},
+  {name: `Train`, article: ` to`},
+  {name: `Ship`, article: ` to`},
+  {name: `Transport`, article: ` to`},
+  {name: `Drive`, article: ` to`},
+  {name: `Flight`, article: ` to`},
+  {name: `Check-in`, article: ` in`},
+  {name: `Sightseeing`, article: ` in`},
+  {name: `Restaurant`, article: ` in`},
 ];
 
 export const offers = [
-  `Choose seats`,
-  `Add meal`,
-  `Travel by train`,
-  `Switch to comfort class`,
-  `Add luggage`,
+  {name: `Choose seats`, price: 40, className: `seats`},
+  {name: `Add meal`, price: 60, className: `meal`},
+  {name: `Travel by train`, price: 80, className: `train`},
+  {name: `Switch to comfort class`, price: 90, className: `comfort`},
+  {name: `Add luggage`, price: 50, className: `luggage`},
 ];
 
 export const cities = [
