@@ -1,22 +1,11 @@
-import {getRandomInteger} from "../utils.js";
-import {types, offers} from "../const.js";
+import {getRandomInt} from "../utils.js";
+import {offers} from "../const.js";
 
-const generateOffers = () => {
-  const randomIndex = getRandomInteger(0, offers.length - 1);
+export const generateOffers = () => {
   let randomOffers = [];
-  for (let i = 0; i < Math.random() && i < 5; i++) {
-    randomOffers.push(offers[randomIndex].name);
+  for (let i = 0; i < getRandomInt(0, 5); i++) {
+    const randomIndex = getRandomInt(0, offers.length - 1);
+    randomOffers.push(offers[randomIndex]);
   }
   return randomOffers;
-};
-const generateType = () => {
-  const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex].name;
-};
-
-export const generateOffer = () => {
-  return {
-    type: generateType(),
-    offer: generateOffers(),
-  };
 };

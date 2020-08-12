@@ -1,14 +1,14 @@
 export const types = [
-  {name: `Taxi`, article: ` to`},
-  {name: `Bus`, article: ` to`},
-  {name: `Train`, article: ` to`},
-  {name: `Ship`, article: ` to`},
-  {name: `Transport`, article: ` to`},
-  {name: `Drive`, article: ` to`},
-  {name: `Flight`, article: ` to`},
-  {name: `Check-in`, article: ` in`},
-  {name: `Sightseeing`, article: ` in`},
-  {name: `Restaurant`, article: ` in`},
+  `Taxi`,
+  `Bus`,
+  `Train`,
+  `Ship`,
+  `Transport`,
+  `Drive`,
+  `Flight`,
+  `Check-in`,
+  `Sightseeing`,
+  `Restaurant`,
 ];
 
 export const offers = [

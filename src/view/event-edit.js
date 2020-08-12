@@ -1,6 +1,3 @@
-import {getRandomInt, getRandomInteger} from "../utils";
-import {cities, types, offers} from "../const";
-
 const typesTransfer = [
   `Taxi`,
   `Bus`,
@@ -17,9 +14,9 @@ const typesActivity = [
   `Restaurant`,
 ];
 
-const createEventEditOfferTemplate = (currentOffer) => {
+const createEventEditOfferTemplate = (offers) => {
   return offers.map(({name, price, className}) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${currentOffer === name ? `checked` : ``}>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${offers === name ? `checked` : ``}>
     <label class="event__offer-label" for="event-offer-${className}-1">
     <span class="event__offer-title">${name}</span>
     &plus;
@@ -41,26 +38,27 @@ const createEventEditTypeActivityTemplate = (currentType) => {
                             </div>`).join(``);
 };
 
-const generateCity = () => {
-  const randomIndex = getRandomInteger(0, cities.length - 1);
-  return cities[randomIndex];
-};
+export const createEventEditTemplate = (event) => {
+  const {type, city, destination, offers, price, startDate, endDate, startTime, endTime} = event;
+  let eventTypeArticle = ``;
+  switch (type) {
+    case `Taxi`:
+    case `Bus`:
+    case `Train`:
+    case `Ship`:
+    case `Transport`:
+    case `Drive`:
+    case `Flight`:
+      eventTypeArticle = `to`;
+      break;
+    case `Check-in`:
+    case `Sightseeing`:
+    case `Restaurant`:
+      eventTypeArticle = `in`;
+      break;
+  }
 
-const generateType = () => {
-  const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex].name + types[randomIndex].article;
-};
-
-export const createEventEditTemplate = (event = {}) => {
-  const {
-    type = generateType(),
-    city = generateCity(),
-    image = `http://picsum.photos/248/152?r=${Math.random()}`,
-    offer = ``,
-    price = Math.ceil(getRandomInt(30, 180)),
-  } = event;
-
-  const offerTemplate = createEventEditOfferTemplate(offer);
+  const offerTemplate = createEventEditOfferTemplate(offers);
   const typeTransferTemplate = createEventEditTypeTransferTemplate(type);
   const typeActivityTemplate = createEventEditTypeActivityTemplate(type);
 
@@ -71,7 +69,7 @@ export const createEventEditTemplate = (event = {}) => {
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src=${image} alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src=${destination.image} alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -94,7 +92,7 @@ export const createEventEditTemplate = (event = {}) => {
 
                       <div class="event__field-group  event__field-group--destination">
                         <label class="event__label  event__type-output" for="event-destination-1">
-                           ${type}
+                           ${type} ${eventTypeArticle}
                         </label>
                         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
                         <datalist id="destination-list-1">
@@ -108,12 +106,12 @@ export const createEventEditTemplate = (event = {}) => {
                         <label class="visually-hidden" for="event-start-time-1">
                           From
                         </label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate} ${startTime}">
                         &mdash;
                         <label class="visually-hidden" for="event-end-time-1">
                           To
                         </label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate} ${endTime}">
                       </div>
 
                       <div class="event__field-group  event__field-group--price">
