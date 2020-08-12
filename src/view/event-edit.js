@@ -38,6 +38,27 @@ const createEventEditTypeActivityTemplate = (currentType) => {
                             </div>`).join(``);
 };
 
+const generateStartDate = (date) => {
+  const startYear = date.getFullYear();
+  const startMonth = date.getMonth();
+  const startDay = date.getDate();
+  if (startMonth <= 9) {
+    return startDay + `/` + `0` + startMonth + `/` + startYear;
+  } else {
+    return startDay + `/` + startMonth + `/` + startYear;
+  }
+};
+const generateEndDate = (date) => {
+  const endYear = date.getFullYear();
+  const endMonth = date.getMonth();
+  const endDay = date.getDate();
+  if (endMonth <= 9) {
+    return endDay + `/` + `0` + endMonth + `/` + endYear;
+  } else {
+    return endDay + `/` + endMonth + `/` + endYear;
+  }
+};
+
 export const createEventEditTemplate = (event) => {
   const {type, city, destination, offers, price, startDate, endDate, startTime, endTime} = event;
   let eventTypeArticle = ``;
@@ -61,6 +82,8 @@ export const createEventEditTemplate = (event) => {
   const offerTemplate = createEventEditOfferTemplate(offers);
   const typeTransferTemplate = createEventEditTypeTransferTemplate(type);
   const typeActivityTemplate = createEventEditTypeActivityTemplate(type);
+  const randomStartDate = generateStartDate(startDate);
+  const randomEndDate = generateEndDate(endDate);
 
   return (
     `<li class="trip-events__item">
@@ -106,12 +129,12 @@ export const createEventEditTemplate = (event) => {
                         <label class="visually-hidden" for="event-start-time-1">
                           From
                         </label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate} ${startTime}">
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${randomStartDate} ${startTime}">
                         &mdash;
                         <label class="visually-hidden" for="event-end-time-1">
                           To
                         </label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate} ${endTime}">
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${randomEndDate} ${endTime}">
                       </div>
 
                       <div class="event__field-group  event__field-group--price">

@@ -6,8 +6,44 @@ const createOfferTemplate = (offers) => {
     </li>`).join(``);
 };
 
+const durationTimeDisplay = (duration) => {
+  const minutes = ((duration / (1000 * 60)) % 60);
+  const hours = ((duration / (1000 * 60 * 60)) % 24);
+  const days = (duration / (1000 * 60 * 60 * 24));
+  if (Math.floor(days) > 0) {
+    return Math.floor(days) + `D ` + Math.floor(hours) + `H ` + minutes + `M`;
+  } else if (Math.floor(days) <= 0 && Math.floor(hours) > 0) {
+    return Math.floor(hours) + `H ` + minutes + `M`;
+  } else if (Math.floor(days) <= 0 && Math.floor(hours) <= 0 && minutes > 0) {
+    return minutes + `M`;
+  } else {
+    return ``;
+  }
+};
+
+const generateStartDate = (date) => {
+  const startYear = date.getFullYear();
+  const startMonth = date.getMonth();
+  const startDay = date.getDate();
+  if (startMonth <= 9) {
+    return startYear + `-` + `0` + startMonth + `-` + startDay;
+  } else {
+    return startYear + `-` + startMonth + `-` + startDay;
+  }
+};
+const generateEndDate = (date) => {
+  const endYear = date.getFullYear();
+  const endMonth = date.getMonth();
+  const endDay = date.getDate();
+  if (endMonth <= 9) {
+    return endYear + `-` + `0` + endMonth + `-` + endDay;
+  } else {
+    return endYear + `-` + endMonth + `-` + endDay;
+  }
+};
+
 export const createEventTemplate = (event) => {
-  const {type, city, destination, price, offers, startTime, endTime, durationTime} = event;
+  const {type, city, destination, price, offers, startDate, endDate, startTime, endTime, durationTime} = event;
 
   let eventTypeArticle = ``;
   switch (type) {
@@ -27,6 +63,9 @@ export const createEventTemplate = (event) => {
       break;
   }
 
+  const durationTimeTemplate = durationTimeDisplay(durationTime);
+  const randomStartDate = generateStartDate(startDate);
+  const randomEndDate = generateEndDate(endDate);
   const offerTemplate = createOfferTemplate(offers);
   return (
     `<li class="trip-events__item">
@@ -38,11 +77,11 @@ export const createEventTemplate = (event) => {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="2019-03-19T${startTime}">${startTime}</time>
+                        <time class="event__start-time" datetime="${randomStartDate}T${startTime}">${startTime}</time>
                         &mdash;
-                        <time class="event__end-time" datetime="2019-03-19T${endTime}">${endTime}</time>
+                        <time class="event__end-time" datetime="${randomEndDate}T${endTime}">${endTime}</time>
                       </p>
-                      <p class="event__duration">${durationTime}</p>
+                      <p class="event__duration">${durationTimeTemplate}</p>
                     </div>
 
                     <p class="event__price">

@@ -19,30 +19,12 @@ const generatePhoto = () => {
   const photo = `http://picsum.photos/248/152?r=${Math.random()}`;
   return photo;
 };
-
+const randomStartDate = new Date(2019, 2 + Math.floor(Math.random() * 2), 2 + Math.ceil(Math.random() * 20), 11, 20);
+const randomEndDate = new Date(randomStartDate.getFullYear() + Math.floor(Math.random()), randomStartDate.getMonth() + Math.floor(Math.random() * 2), randomStartDate.getDate() + Math.ceil(Math.random() * 10), 13, 0);
 const startTime = new Date(2019, 3, 19, 11, 20);
 const endTime = new Date(2019, 3, 19, 13, 0);
-
-const generateStartDate = () => {
-  const startYear = startTime.getFullYear();
-  const startMonth = startTime.getMonth();
-  const startDay = startTime.getDate();
-  if (startMonth <= 9) {
-    return startDay + `/` + `0` + startMonth + `/` + startYear;
-  } else {
-    return startDay + `/` + startMonth + `/` + startYear;
-  }
-};
-const generateEndDate = () => {
-  const endYear = endTime.getFullYear();
-  const endMonth = endTime.getMonth();
-  const endDay = endTime.getDate();
-  if (endMonth <= 9) {
-    return endDay + `/` + `0` + endMonth + `/` + endYear;
-  } else {
-    return endDay + `/` + endMonth + `/` + endYear;
-  }
-};
+console.log(randomStartDate);
+console.log(randomEndDate);
 
 const generateStartTime = () => {
   return startTime.toLocaleTimeString().slice(0, -3);
@@ -52,19 +34,7 @@ const generateEndTime = () => {
 };
 
 const generateDurationTime = () => {
-  const duration = endTime - startTime;
-  const minutes = ((duration / (1000 * 60)) % 60);
-  const hours = ((duration / (1000 * 60 * 60)) % 24);
-  const days = (duration / (1000 * 60 * 60 * 24));
-  if (Math.floor(days) > 0) {
-    return Math.floor(days) + `D ` + Math.floor(hours) + `H ` + minutes + `M`;
-  } else if (Math.floor(days) <= 0 && Math.floor(hours) > 0) {
-    return Math.floor(hours) + `H ` + minutes + `M`;
-  } else if (Math.floor(days) <= 0 && Math.floor(hours) <= 0 && minutes > 0) {
-    return minutes + `M`;
-  } else {
-    return ``;
-  }
+  return endTime - startTime;
 };
 
 export const generateEvent = () => {
@@ -74,8 +44,8 @@ export const generateEvent = () => {
     offers: generateOffers(),
     isFavorite: Boolean(getRandomInt(0, 1)),
     price: generatePrice(),
-    startDate: generateStartDate(),
-    endDate: generateEndDate(),
+    startDate: randomStartDate,
+    endDate: randomEndDate,
     startTime: generateStartTime(),
     endTime: generateEndTime(),
     durationTime: generateDurationTime(),
