@@ -9,7 +9,7 @@ import {generateEvent} from "./mock/event.js";
 
 const EVENTS_COUNT = 20;
 
-const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
+export const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -18,7 +18,7 @@ const render = (container, template, place) => {
 const mainHeaderElement = document.querySelector(`.trip-main`);
 const menuAndFilterElement = mainHeaderElement.querySelector(`.trip-main__trip-controls`);
 
-render(mainHeaderElement, createTripInfoTemplate(events[0]), `afterbegin`);
+render(mainHeaderElement, createTripInfoTemplate(events), `afterbegin`);
 render(menuAndFilterElement, createMenuTemplate(), `beforeend`);
 render(menuAndFilterElement, createFilterTemplate(), `beforeend`);
 

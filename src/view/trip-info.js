@@ -1,5 +1,9 @@
-export const createTripInfoTemplate = (event) => {
-  const {priceSum} = event;
+import {events} from "../main.js";
+
+export const createTripInfoTemplate = () => {
+  const prices = events.map(({price}) => price).reduce(function (a, b) {
+    return a + b;
+  });
   return (
     `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
@@ -9,7 +13,7 @@ export const createTripInfoTemplate = (event) => {
             </div>
 
             <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">${priceSum}</span>
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${prices}</span>
             </p>
           </section>`
   );
