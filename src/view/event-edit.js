@@ -43,9 +43,9 @@ const generateStartDate = (date) => {
   const startMonth = date.getMonth();
   const startDay = date.getDate();
   if (startMonth <= 9) {
-    return startDay + `/` + `0` + startMonth + `/` + startYear;
+    return startDay + `/` + `0` + (startMonth + 1) + `/` + startYear;
   } else {
-    return startDay + `/` + startMonth + `/` + startYear;
+    return startDay + `/` + (startMonth + 1) + `/` + startYear;
   }
 };
 const generateEndDate = (date) => {
@@ -53,9 +53,9 @@ const generateEndDate = (date) => {
   const endMonth = date.getMonth();
   const endDay = date.getDate();
   if (endMonth <= 9) {
-    return endDay + `/` + `0` + endMonth + `/` + endYear;
+    return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear;
   } else {
-    return endDay + `/` + endMonth + `/` + endYear;
+    return endDay + `/` + (endMonth + 1) + `/` + endYear;
   }
 };
 

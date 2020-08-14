@@ -1,4 +1,11 @@
-export const createTripInfoTemplate = () => {
+const getPriceSum = (price) => {
+  const sum = price++;
+  return sum;
+};
+
+export const createTripInfoTemplate = (event) => {
+  const {price} = event;
+  const sumPriceTemplate = getPriceSum(price);
   return (
     `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
@@ -8,7 +15,7 @@ export const createTripInfoTemplate = () => {
             </div>
 
             <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${sumPriceTemplate}</span>
             </p>
           </section>`
   );

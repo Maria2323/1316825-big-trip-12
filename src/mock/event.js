@@ -23,8 +23,6 @@ const randomStartDate = new Date(2019, 2 + Math.floor(Math.random() * 2), 2 + Ma
 const randomEndDate = new Date(randomStartDate.getFullYear() + Math.floor(Math.random()), randomStartDate.getMonth() + Math.floor(Math.random() * 2), randomStartDate.getDate() + Math.ceil(Math.random() * 10), 13, 0);
 const startTime = new Date(2019, 3, 19, 11, 20);
 const endTime = new Date(2019, 3, 19, 13, 0);
-console.log(randomStartDate);
-console.log(randomEndDate);
 
 const generateStartTime = () => {
   return startTime.toLocaleTimeString().slice(0, -3);

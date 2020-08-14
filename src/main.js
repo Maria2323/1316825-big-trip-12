@@ -18,7 +18,7 @@ const render = (container, template, place) => {
 const mainHeaderElement = document.querySelector(`.trip-main`);
 const menuAndFilterElement = mainHeaderElement.querySelector(`.trip-main__trip-controls`);
 
-render(mainHeaderElement, createTripInfoTemplate(), `afterbegin`);
+render(mainHeaderElement, createTripInfoTemplate(events[0]), `afterbegin`);
 render(menuAndFilterElement, createMenuTemplate(), `beforeend`);
 render(menuAndFilterElement, createFilterTemplate(), `beforeend`);
 
@@ -26,7 +26,7 @@ const pageMainElement = document.querySelector(`.page-body__page-main`);
 const tripEventsElements = pageMainElement.querySelector(`.trip-events`);
 
 render(tripEventsElements, createSortTemplate(), `beforeend`);
-render(tripEventsElements, createEventsListTemplate(), `beforeend`);
+render(tripEventsElements, createEventsListTemplate(events[0]), `beforeend`);
 
 const tripEventsListElement = pageMainElement.querySelector(`.trip-events__list`);
 
