@@ -51,7 +51,7 @@ const generateStartDate = (date) => {
 const generateEndDate = (date) => {
   const endYear = date.getFullYear();
   const endMonth = date.getMonth();
-  const endDay = date.getDate();
+  const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 3);
   if (endMonth <= 9) {
     return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear;
   } else {

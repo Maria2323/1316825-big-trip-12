@@ -19,8 +19,25 @@ const generatePhoto = () => {
   const photo = `http://picsum.photos/248/152?r=${Math.random()}`;
   return photo;
 };
-const randomStartDate = new Date(2019, 2 + Math.floor(Math.random() * 2), 2 + Math.ceil(Math.random() * 20), 11, 20);
-const randomEndDate = new Date(randomStartDate.getFullYear() + Math.floor(Math.random()), randomStartDate.getMonth() + Math.floor(Math.random() * 2), randomStartDate.getDate() + Math.ceil(Math.random() * 10), 13, 0);
+
+const dateNow = new Date();
+const dateNowPlusOneDay = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate() + 1);
+const dateNowPlusSomeDays = new Date(dateNowPlusOneDay.getFullYear(), dateNowPlusOneDay.getMonth(), dateNowPlusOneDay.getDate() + Math.floor(Math.random() * 5));
+const dateNowPlusOneDayInMS = new Date(dateNowPlusOneDay).getTime();
+const dateNowPlusSomeDaysInMS = new Date(dateNowPlusSomeDays).getTime();
+
+const getRandomDates = () => {
+  const randomDateInMS = getRandomInt(dateNowPlusOneDayInMS, dateNowPlusSomeDaysInMS);
+  const randomDate = new Date(randomDateInMS);
+  return new Date(randomDate.getFullYear(), randomDate.getMonth(), randomDate.getDate());
+};
+
+console.log(dateNow);
+console.log(dateNowPlusOneDay);
+console.log(dateNowPlusSomeDays);
+console.log(dateNowPlusOneDayInMS);
+console.log(getRandomDates());
+
 const startTime = new Date(2019, 3, 19, 11, 20);
 const endTime = new Date(2019, 3, 19, 13, 0);
 
@@ -42,8 +59,8 @@ export const generateEvent = () => {
     offers: generateOffers(),
     isFavorite: Boolean(getRandomInt(0, 1)),
     price: generatePrice(),
-    startDate: randomStartDate,
-    endDate: randomEndDate,
+    startDate: getRandomDates(),
+    endDate: getRandomDates(),
     startTime: generateStartTime(),
     endTime: generateEndTime(),
     durationTime: generateDurationTime(),
