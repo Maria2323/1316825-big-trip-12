@@ -44,7 +44,6 @@ const generateEndDate = (date) => {
 
 export const createEventTemplate = (event) => {
   const {type, city, destination, price, offers, startDate, endDate, startTime, endTime, durationTime} = event;
-
   let eventTypeArticle = ``;
   switch (type) {
     case `Taxi`:
