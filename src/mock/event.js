@@ -41,8 +41,6 @@ export const generateEvent = () => {
     price: generatePrice(),
     startDate: getRandomDate(),
     endDate: getRandomDate(),
-    startTime: getRandomDate(),
-    endTime: getRandomDate(),
     destination: {
       image: generatePhoto(),
       description: generateDescription(),
