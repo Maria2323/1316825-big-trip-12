@@ -76,7 +76,7 @@ export const createEventTemplate = (event) => {
   const randomEndDate = generateEndDate(endDate);
   const randomStartTime = generateTime(startDate);
   const randomEndTime = generateTime(endDate);
-  const durationTimeTemplate = durationTimeDisplay(randomEndDate, randomStartDate);
+  const durationTimeTemplate = durationTimeDisplay(endDate, startDate);
   const offerTemplate = createOfferTemplate(offers);
   return (
     `<li class="trip-events__item">
