@@ -6,16 +6,17 @@ const createOfferTemplate = (offers) => {
     </li>`).join(``);
 };
 
-const durationTimeDisplay = (duration) => {
+const durationTimeDisplay = (endTime, startTime) => {
+  const duration = new Date(endTime) - new Date(startTime);
   const minutes = ((duration / (1000 * 60)) % 60);
   const hours = ((duration / (1000 * 60 * 60)) % 24);
   const days = (duration / (1000 * 60 * 60 * 24));
   if (Math.floor(days) > 0) {
-    return Math.floor(days) + `D ` + Math.floor(hours) + `H ` + minutes + `M`;
+    return Math.floor(days) + `D ` + Math.floor(hours) + `H ` + Math.floor(minutes) + `M`;
   } else if (Math.floor(days) <= 0 && Math.floor(hours) > 0) {
-    return Math.floor(hours) + `H ` + minutes + `M`;
-  } else if (Math.floor(days) <= 0 && Math.floor(hours) <= 0 && minutes > 0) {
-    return minutes + `M`;
+    return Math.floor(hours) + `H ` + Math.floor(minutes) + `M`;
+  } else if (Math.floor(days) <= 0 && Math.floor(hours) <= 0 && Math.floor(minutes) > 0) {
+    return Math.floor(minutes) + `M`;
   } else {
     return ``;
   }
@@ -41,9 +42,18 @@ const generateEndDate = (date) => {
     return endYear + `-` + endMonth + `-` + endDay;
   }
 };
+const generateTime = (date) => {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  if (minutes < 10) {
+    return hours + `:` + `0` + minutes;
+  } else {
+    return hours + `:` + minutes;
+  }
+};
 
 export const createEventTemplate = (event) => {
-  const {type, city, destination, price, offers, startDate, endDate, startTime, endTime, durationTime} = event;
+  const {type, city, destination, price, offers, startDate, endDate, startTime, endTime} = event;
   let eventTypeArticle = ``;
   switch (type) {
     case `Taxi`:
@@ -62,9 +72,11 @@ export const createEventTemplate = (event) => {
       break;
   }
 
-  const durationTimeTemplate = durationTimeDisplay(durationTime);
+  const durationTimeTemplate = durationTimeDisplay(endTime, startTime);
   const randomStartDate = generateStartDate(startDate);
   const randomEndDate = generateEndDate(endDate);
+  const randomStartTime = generateTime(startDate);
+  const randomEndTime = generateTime(endDate);
   const offerTemplate = createOfferTemplate(offers);
   return (
     `<li class="trip-events__item">
@@ -76,9 +88,9 @@ export const createEventTemplate = (event) => {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="${randomStartDate}T${startTime}">${startTime}</time>
+                        <time class="event__start-time" datetime="${randomStartDate}T${randomStartTime}">${randomStartTime}</time>
                         &mdash;
-                        <time class="event__end-time" datetime="${randomEndDate}T${endTime}">${endTime}</time>
+                        <time class="event__end-time" datetime="${randomEndDate}T${randomEndTime}">${randomEndTime}</time>
                       </p>
                       <p class="event__duration">${durationTimeTemplate}</p>
                     </div>

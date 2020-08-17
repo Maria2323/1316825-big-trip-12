@@ -42,20 +42,24 @@ const generateStartDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
   const startDay = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
   if (startMonth <= 9) {
-    return startDay + `/` + `0` + (startMonth + 1) + `/` + startYear;
+    return startDay + `/` + `0` + (startMonth + 1) + `/` + startYear + ` ` + hours + `:` + minutes + ` `;
   } else {
-    return startDay + `/` + (startMonth + 1) + `/` + startYear;
+    return startDay + `/` + (startMonth + 1) + `/` + startYear + ` ` + hours + `:` + minutes;
   }
 };
 const generateEndDate = (date) => {
   const endYear = date.getFullYear();
   const endMonth = date.getMonth();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
   const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 3);
   if (endMonth <= 9) {
-    return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear;
+    return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;
   } else {
-    return endDay + `/` + (endMonth + 1) + `/` + endYear;
+    return endDay + `/` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;
   }
 };
 

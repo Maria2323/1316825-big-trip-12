@@ -21,35 +21,15 @@ const generatePhoto = () => {
 };
 
 const dateNow = new Date();
-const dateNowPlusOneDay = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate() + 1);
-const dateNowPlusSomeDays = new Date(dateNowPlusOneDay.getFullYear(), dateNowPlusOneDay.getMonth(), dateNowPlusOneDay.getDate() + Math.floor(Math.random() * 5));
+const dateNowPlusOneDay = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate() + 1, dateNow.getHours(), dateNow.getMinutes());
+const dateNowPlusSomeDays = new Date(dateNowPlusOneDay.getFullYear(), dateNowPlusOneDay.getMonth(), dateNowPlusOneDay.getDate() + Math.floor(Math.random() * 5), dateNowPlusOneDay.getHours(), dateNowPlusOneDay.getMinutes());
 const dateNowPlusOneDayInMS = new Date(dateNowPlusOneDay).getTime();
 const dateNowPlusSomeDaysInMS = new Date(dateNowPlusSomeDays).getTime();
 
-const getRandomDates = () => {
+const getRandomDate = () => {
   const randomDateInMS = getRandomInt(dateNowPlusOneDayInMS, dateNowPlusSomeDaysInMS);
   const randomDate = new Date(randomDateInMS);
-  return new Date(randomDate.getFullYear(), randomDate.getMonth(), randomDate.getDate());
-};
-
-console.log(dateNow);
-console.log(dateNowPlusOneDay);
-console.log(dateNowPlusSomeDays);
-console.log(dateNowPlusOneDayInMS);
-console.log(getRandomDates());
-
-const startTime = new Date(2019, 3, 19, 11, 20);
-const endTime = new Date(2019, 3, 19, 13, 0);
-
-const generateStartTime = () => {
-  return startTime.toLocaleTimeString().slice(0, -3);
-};
-const generateEndTime = () => {
-  return endTime.toLocaleTimeString().slice(0, -3);
-};
-
-const generateDurationTime = () => {
-  return endTime - startTime;
+  return randomDate;
 };
 
 export const generateEvent = () => {
@@ -59,11 +39,10 @@ export const generateEvent = () => {
     offers: generateOffers(),
     isFavorite: Boolean(getRandomInt(0, 1)),
     price: generatePrice(),
-    startDate: getRandomDates(),
-    endDate: getRandomDates(),
-    startTime: generateStartTime(),
-    endTime: generateEndTime(),
-    durationTime: generateDurationTime(),
+    startDate: getRandomDate(),
+    endDate: getRandomDate(),
+    startTime: getRandomDate(),
+    endTime: getRandomDate(),
     destination: {
       image: generatePhoto(),
       description: generateDescription(),
