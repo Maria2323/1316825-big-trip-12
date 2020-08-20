@@ -1,10 +1,8 @@
-import {MIN_COUNT_FOR_DATES} from "../const.js";
-
 const generateStartDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
   const startDay = date.getDate();
-  if (startMonth <= MIN_COUNT_FOR_DATES) {
+  if (startMonth <= 9) {
     return startYear + `-` + `0` + startMonth + `-` + startDay;
   } else {
     return startYear + `-` + startMonth + `-` + startDay;
