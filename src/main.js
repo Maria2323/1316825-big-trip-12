@@ -11,6 +11,12 @@ const EVENTS_COUNT = 20;
 
 export const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
 
+const arrayFromEvents = [];
+const arraySameEvents = [];
+for (let i = 0; i < events.length; i++) {
+  arrayFromEvents.push(Object({month: events[i].startDate.getMonth(), date: events[i].startDate.getDate(), sameEvents: arraySameEvents}));
+}
+
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };

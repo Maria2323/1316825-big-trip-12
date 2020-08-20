@@ -26,20 +26,32 @@ const generateStartDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
   const startDay = date.getDate();
-  if (startMonth <= 9) {
-    return startYear + `-` + `0` + startMonth + `-` + startDay;
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  if (startMonth <= 9 && minutes > 9) {
+    return startYear + `-` + `0` + startMonth + `-` + startDay + `T` + hours + `:` + minutes;
+  } else if (startMonth <= 9 && minutes <= 9) {
+    return startYear + `-` + `0` + startMonth + `-` + startDay + `T` + hours + `:` + `0` + minutes;
+  } else if (startMonth > 9 && minutes <= 9) {
+    return startYear + `-` + startMonth + `-` + startDay + `T` + hours + `:` + `0` + minutes;
   } else {
-    return startYear + `-` + startMonth + `-` + startDay;
+    return startYear + `-` + startMonth + `-` + startDay + `T` + hours + `:` + minutes;
   }
 };
 const generateEndDate = (date) => {
   const endYear = date.getFullYear();
   const endMonth = date.getMonth();
   const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 5);
-  if (endMonth <= 9) {
-    return endYear + `-` + `0` + endMonth + `-` + endDay;
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  if (endMonth <= 9 && minutes > 9) {
+    return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
+  } else if (endMonth <= 9 && minutes <= 9) {
+    return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
+  } else if (endMonth > 9 && minutes <= 9) {
+    return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
   } else {
-    return endYear + `-` + endMonth + `-` + endDay;
+    return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
   }
 };
 const generateTime = (date) => {
@@ -73,7 +85,7 @@ export const createEventTemplate = (event) => {
   }
 
   const randomStartDate = generateStartDate(startDate);
-  const randomEndDate = generateEndDate(endDate);
+  const randomEndDate = generateEndDate(startDate);
   const randomStartTime = generateTime(startDate);
   const randomEndTime = generateTime(endDate);
   const durationTimeTemplate = durationTimeDisplay(endDate, startDate);
@@ -90,7 +102,7 @@ export const createEventTemplate = (event) => {
                       <p class="event__time">
                         <time class="event__start-time" datetime="${randomStartDate}T${randomStartTime}">${randomStartTime}</time>
                         &mdash;
-                        <time class="event__end-time" datetime="${randomEndDate}T${randomEndTime}">${randomEndTime}</time>
+                        <time class="event__end-time" datetime="${randomEndDate}">${randomEndTime}</time>
                       </p>
                       <p class="event__duration">${durationTimeTemplate}</p>
                     </div>

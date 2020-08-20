@@ -1,4 +1,3 @@
-const EVENT_LIST_ITEMS = 3;
 const generateStartDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
@@ -15,19 +14,6 @@ const generateDate = (date) => {
 const generateMonth = (date) => {
   return date.toLocaleString(`en-us`, {month: `short`});
 };
-for (let i = 0; i < EVENT_LIST_ITEMS; i++) {
-  const creatorEventListItems = (startDate) => {
-    return `<li class="trip-days__item  day">
-              <div class="day__info">
-                <span class="day__counter">1 += 1</span>
-                <time class="day__date" datetime="${generateStartDate(startDate)}">${generateMonth(startDate)} ${generateDate(startDate)}</time>
-              </div>
-
-              <ul class="trip-events__list">
-              </ul>
-            </li>`.join(``);
-  };
-}
 
 export const createEventsListTemplate = (event) => {
   const {startDate} = event;
