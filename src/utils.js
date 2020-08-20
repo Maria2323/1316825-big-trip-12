@@ -6,3 +6,7 @@ export const getRandomElementFromArray = (array) => {
   const randomIndex = getRandomInt(0, array.length - 1);
   return array[randomIndex];
 };
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};

@@ -1,3 +1,5 @@
+import {MIN_COUNT_FOR_DATES} from "../const.js";
+
 const createOfferTemplate = (offers) => {
   return offers.slice(0, 3).map(({name, price}) => `<li class="event__offer">
     <span class="event__offer-title">${name}</span>
@@ -28,11 +30,11 @@ const generateStartDate = (date) => {
   const startDay = date.getDate();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  if (startMonth <= 9 && minutes > 9) {
+  if (startMonth <= MIN_COUNT_FOR_DATES && minutes > MIN_COUNT_FOR_DATES) {
     return startYear + `-` + `0` + startMonth + `-` + startDay + `T` + hours + `:` + minutes;
-  } else if (startMonth <= 9 && minutes <= 9) {
+  } else if (startMonth <= MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
     return startYear + `-` + `0` + startMonth + `-` + startDay + `T` + hours + `:` + `0` + minutes;
-  } else if (startMonth > 9 && minutes <= 9) {
+  } else if (startMonth > MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
     return startYear + `-` + startMonth + `-` + startDay + `T` + hours + `:` + `0` + minutes;
   } else {
     return startYear + `-` + startMonth + `-` + startDay + `T` + hours + `:` + minutes;
@@ -44,11 +46,11 @@ const generateEndDate = (date) => {
   const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 5);
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  if (endMonth <= 9 && minutes > 9) {
+  if (endMonth <= MIN_COUNT_FOR_DATES && minutes > MIN_COUNT_FOR_DATES) {
     return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
-  } else if (endMonth <= 9 && minutes <= 9) {
+  } else if (endMonth <= MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
     return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
-  } else if (endMonth > 9 && minutes <= 9) {
+  } else if (endMonth > MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
     return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
   } else {
     return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
@@ -57,7 +59,7 @@ const generateEndDate = (date) => {
 const generateTime = (date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  if (minutes < 10) {
+  if (minutes <= MIN_COUNT_FOR_DATES) {
     return hours + `:` + `0` + minutes;
   } else {
     return hours + `:` + minutes;

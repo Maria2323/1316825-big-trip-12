@@ -1,9 +1,10 @@
-const EVENT_LIST_ITEMS = 3;
+import {MIN_COUNT_FOR_DATES} from "../const.js";
+
 const generateStartDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
   const startDay = date.getDate();
-  if (startMonth <= 9) {
+  if (startMonth <= MIN_COUNT_FOR_DATES) {
     return startYear + `-` + `0` + startMonth + `-` + startDay;
   } else {
     return startYear + `-` + startMonth + `-` + startDay;
@@ -15,19 +16,6 @@ const generateDate = (date) => {
 const generateMonth = (date) => {
   return date.toLocaleString(`en-us`, {month: `short`});
 };
-for (let i = 0; i < EVENT_LIST_ITEMS; i++) {
-  const creatorEventListItems = (startDate) => {
-    return `<li class="trip-days__item  day">
-              <div class="day__info">
-                <span class="day__counter">1 += 1</span>
-                <time class="day__date" datetime="${generateStartDate(startDate)}">${generateMonth(startDate)} ${generateDate(startDate)}</time>
-              </div>
-
-              <ul class="trip-events__list">
-              </ul>
-            </li>`.join(``);
-  };
-}
 
 export const createEventsListTemplate = (event) => {
   const {startDate} = event;

@@ -1,3 +1,5 @@
+import {MIN_COUNT_FOR_DATES} from "../const.js";
+
 const typesTransfer = [
   `Taxi`,
   `Bus`,
@@ -44,7 +46,7 @@ const generateStartDate = (date) => {
   const startDay = date.getDate();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  if (startMonth <= 9) {
+  if (startMonth <= MIN_COUNT_FOR_DATES) {
     return startDay + `/` + `0` + (startMonth + 1) + `/` + startYear + ` ` + hours + `:` + minutes + ` `;
   } else {
     return startDay + `/` + (startMonth + 1) + `/` + startYear + ` ` + hours + `:` + minutes;
@@ -56,7 +58,7 @@ const generateEndDate = (date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 3);
-  if (endMonth <= 9) {
+  if (endMonth <= MIN_COUNT_FOR_DATES) {
     return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;
   } else {
     return endDay + `/` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;

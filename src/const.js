@@ -44,3 +44,4 @@ export const descriptions = [
   `Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`,
 ];
+export const MIN_COUNT_FOR_DATES = 9;
