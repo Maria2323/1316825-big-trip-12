@@ -1,4 +1,5 @@
 import {MIN_COUNT_FOR_DATES} from "../const.js";
+import {createElement} from "../utils.js";
 
 const typesTransfer = [
   `Taxi`,
@@ -65,7 +66,7 @@ const generateEndDate = (date) => {
   }
 };
 
-export const createEventEditTemplate = (event) => {
+const createEventEditTemplate = (event) => {
   const {type, city, destination, offers, price, startDate, endDate} = event;
   let eventTypeArticle = ``;
   switch (type) {
@@ -182,3 +183,24 @@ export const createEventEditTemplate = (event) => {
                 </li>`
   );
 };
+
+export default class EventEdit {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+  getTemplate() {
+    return createEventEditTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

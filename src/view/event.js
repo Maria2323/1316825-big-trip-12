@@ -1,4 +1,5 @@
 import {MIN_COUNT_FOR_DATES} from "../const.js";
+import {createElement} from "../utils.js";
 
 const createOfferTemplate = (offers) => {
   return offers.slice(0, 3).map(({name, price}) => `<li class="event__offer">
@@ -66,7 +67,7 @@ const generateTime = (date) => {
   }
 };
 
-export const createEventTemplate = (event) => {
+const createEventTemplate = (event) => {
   const {type, city, destination, price, offers, startDate, endDate} = event;
   let eventTypeArticle = ``;
   switch (type) {
@@ -125,3 +126,24 @@ export const createEventTemplate = (event) => {
                 </li>`
   );
 };
+
+export default class Event {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,5 @@
 import {MIN_COUNT_FOR_DATES} from "../const.js";
+import {createElement} from "../utils.js";
 
 const generateStartDate = (date) => {
   const startYear = date.getFullYear();
@@ -17,7 +18,7 @@ const generateMonth = (date) => {
   return date.toLocaleString(`en-us`, {month: `short`});
 };
 
-export const createEventsListTemplate = (event) => {
+const createEventsListTemplate = (event) => {
   const {startDate} = event;
   const randomStartDate = generateStartDate(startDate);
   const randomDate = generateDate(startDate);
@@ -56,3 +57,24 @@ export const createEventsListTemplate = (event) => {
           </ul>`
   );
 };
+
+export default class EventList {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+  getTemplate() {
+    return createEventsListTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

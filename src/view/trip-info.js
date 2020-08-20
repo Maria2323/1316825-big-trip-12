@@ -1,6 +1,7 @@
 import {events} from "../main.js";
+import {createElement} from "../utils";
 
-export const createTripInfoTemplate = () => {
+const createTripInfoTemplate = () => {
   const pricesPoints = events.map(({price, offers}) => price + offers.reduce((a, b) => {
     return (a.price || 0) + (b.price || 0);
   }, 0)).reduce((a, b) => {
@@ -20,3 +21,23 @@ export const createTripInfoTemplate = () => {
           </section>`
   );
 };
+
+export default class TripInfo {
+  constructor() {
+    this._element = null;
+  }
+  getTemplate() {
+    return createTripInfoTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
