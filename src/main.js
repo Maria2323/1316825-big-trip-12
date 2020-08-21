@@ -12,10 +12,13 @@ const EVENTS_COUNT = 20;
 
 export const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
 
+events.sort((a, b) => {
+  return a.startDate - b.startDate;
+});
+
 const arrayFromEvents = [];
-const arraySameEvents = [];
 for (let i = 0; i < events.length; i++) {
-  arrayFromEvents.push(Object({month: events[i].startDate.getMonth(), date: events[i].startDate.getDate(), sameEvents: arraySameEvents}));
+  arrayFromEvents.push(Object({year: events[i].startDate.getFullYear(), month: events[i].startDate.getMonth(), date: events[i].startDate.getDate()}));
 }
 
 const renderEvent = (eventListElement, event) => {
@@ -55,7 +58,7 @@ const renderEvent = (eventListElement, event) => {
 const mainHeaderElement = document.querySelector(`.trip-main`);
 const menuAndFilterElement = mainHeaderElement.querySelector(`.trip-main__trip-controls`);
 
-render(mainHeaderElement, new TripInfoView(events), RenderPosition.AFTERBEGIN);
+render(mainHeaderElement, new TripInfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 render(menuAndFilterElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
 render(menuAndFilterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
 
@@ -63,9 +66,16 @@ const pageMainElement = document.querySelector(`.page-body__page-main`);
 const tripEventsElements = pageMainElement.querySelector(`.trip-events`);
 
 render(tripEventsElements, new SortView().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElements, new EventListView().getElement(events[0]), RenderPosition.BEFOREEND);
-const eventListComponent = new EventListView();
+render(tripEventsElements, new EventListView(arrayFromEvents).getElement(), RenderPosition.BEFOREEND);
 
-for (let i = 0; i < EVENTS_COUNT; i++) {
-  renderEvent(eventListComponent.getElement(), events[i]);
-}
+const eventListElements = pageMainElement.querySelectorAll(`.trip-events__list`);
+
+Array.from(eventListElements).forEach((eventListElement) => {
+  for (let i = 0; i < EVENTS_COUNT; i++) {
+    if (eventListElement.classList.contains(events[i].startDate.getFullYear().toString() && events[i].startDate.getMonth().toString() && events[i].startDate.getDate().toString())) {
+      renderEvent(eventListElement, events[i]);
+    }
+  }
+});
+
+

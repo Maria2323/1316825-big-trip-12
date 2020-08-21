@@ -103,7 +103,7 @@ const createEventTemplate = (event) => {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="${randomStartDate}T${randomStartTime}">${randomStartTime}</time>
+                        <time class="event__start-time" datetime="${randomStartDate}">${randomStartTime}</time>
                         &mdash;
                         <time class="event__end-time" datetime="${randomEndDate}">${randomEndTime}</time>
                       </p>
