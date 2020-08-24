@@ -17,11 +17,30 @@ events.sort((a, b) => {
 });
 
 const arrayFromEvents = [];
+const counter = {
+  date: ``,
+  month: ``,
+  year: ``
+};
 for (let i = 0; i < events.length; i++) {
-  arrayFromEvents.push(Object({year: events[i].startDate.getFullYear(), month: events[i].startDate.getMonth(), date: events[i].startDate.getDate()}));
+  if (events[i].startDate.getFullYear() === counter.year
+    && events[i].startDate.getMonth() === counter.month
+    && events[i].startDate.getDate() === counter.date) {
+    arrayFromEvents[arrayFromEvents.length - 1].points.push(events[i]);
+  } else {
+    counter.date = events[i].startDate.getDate();
+    counter.month = events[i].startDate.getMonth();
+    counter.year = events[i].startDate.getFullYear();
+    arrayFromEvents.push(Object({
+      year: events[i].startDate.getFullYear(),
+      month: events[i].startDate.getMonth(),
+      date: events[i].startDate.getDate(),
+      points: [events[i]]
+    }));
+  }
 }
 
-const renderEvent = (eventListElement, event) => {
+export const renderEvent = (eventListElement, event) => {
   const eventComponent = new EventView(event);
   const eventEditComponent = new EventEditView(event);
 
@@ -41,9 +60,23 @@ const renderEvent = (eventListElement, event) => {
     }
   };
 
+  const closeEventEdit = () => {
+    const openedEventEdit = document.querySelector(`.opened`);
+    if (openedEventEdit) {
+      replaceFormToEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
   eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    closeEventEdit();
     replaceEventToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  eventEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceFormToEvent();
+    document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
   eventEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
@@ -70,11 +103,9 @@ render(tripEventsElements, new EventListView(arrayFromEvents).getElement(), Rend
 
 const eventListElements = pageMainElement.querySelectorAll(`.trip-events__list`);
 
-Array.from(eventListElements).forEach((eventListElement) => {
-  for (let i = 0; i < EVENTS_COUNT; i++) {
-    if (eventListElement.classList.contains(events[i].startDate.getFullYear().toString() && events[i].startDate.getMonth().toString() && events[i].startDate.getDate().toString())) {
-      renderEvent(eventListElement, events[i]);
-    }
+Array.from(eventListElements).forEach((eventListElement, index) => {
+  for (let i = 0; i < arrayFromEvents[index].points.length; i++) {
+    renderEvent(eventListElement, arrayFromEvents[index].points[i]);
   }
 });
 

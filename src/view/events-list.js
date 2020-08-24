@@ -1,8 +1,7 @@
 import {createElement} from "../utils.js";
-import {MIN_COUNT_FOR_DATES} from "../const.js";
 
 const getDateMonthYear = (dates) => {
-  let arrayFromEventsDates = dates.map(({year, month, date}) => year + `-` + (month < MIN_COUNT_FOR_DATES ? `0` + month : month) + `-` + date);
+  let arrayFromEventsDates = dates.map(({year, month, date}) => year + `-` + month.toString().padStart(2, `0`) + `-` + date);
   arrayFromEventsDates = new Set(arrayFromEventsDates);
   return Array.from(arrayFromEventsDates);
 };
@@ -22,7 +21,7 @@ const createEventsListTemplate = (date) => {
       <time class="day__date" datetime="${getDateMonthYear(date)[i]}">${getDateMonthYear(date)[i].substr(5, 2)} ${getDate(date)[i]}</time>
       </div>
 
-      <ul class="trip-events__list ${date[i].year} ${date[i].month} ${date[i].date}">
+      <ul class="trip-events__list">
       </ul>
       </li>`;
   }
