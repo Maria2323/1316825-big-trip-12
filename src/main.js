@@ -5,6 +5,7 @@ import SortView from "./view/sort.js";
 import EventListView from "./view/events-list.js";
 import EventEditView from "./view/event-edit.js";
 import EventView from "./view/event.js";
+import NoPointsView from "./view/no-points.js";
 import {generateEvent} from "./mock/event.js";
 import {RenderPosition, render} from "./utils.js";
 
@@ -98,15 +99,17 @@ render(menuAndFilterElement, new FilterView().getElement(), RenderPosition.BEFOR
 const pageMainElement = document.querySelector(`.page-body__page-main`);
 const tripEventsElements = pageMainElement.querySelector(`.trip-events`);
 
-render(tripEventsElements, new SortView().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElements, new EventListView(arrayFromEvents).getElement(), RenderPosition.BEFOREEND);
+if (events.length === 0) {
+  render(pageMainElement, new NoPointsView().getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(tripEventsElements, new SortView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElements, new EventListView(arrayFromEvents).getElement(), RenderPosition.BEFOREEND);
 
-const eventListElements = pageMainElement.querySelectorAll(`.trip-events__list`);
+  const eventListElements = pageMainElement.querySelectorAll(`.trip-events__list`);
 
-Array.from(eventListElements).forEach((eventListElement, index) => {
-  for (let i = 0; i < arrayFromEvents[index].points.length; i++) {
-    renderEvent(eventListElement, arrayFromEvents[index].points[i]);
-  }
-});
-
-
+  Array.from(eventListElements).forEach((eventListElement, index) => {
+    for (let i = 0; i < arrayFromEvents[index].points.length; i++) {
+      renderEvent(eventListElement, arrayFromEvents[index].points[i]);
+    }
+  });
+}

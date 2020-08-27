@@ -2,12 +2,17 @@ import {events} from "../main.js";
 import {createElement} from "../utils";
 
 const createTripInfoTemplate = () => {
-  const pricesPoints = events.map(({price, offers}) => price + offers.reduce((a, b) => {
+  const pricesPoints = events.length === 0 ? 0 : events.map(({price, offers}) => price + offers.reduce((a, b) => {
     return (a.price || 0) + (b.price || 0);
   }, 0)).reduce((a, b) => {
     return a + b;
   });
-  return (
+  return events.length === 0 ? (
+    `<section class="trip-main__trip-info  trip-info">
+           <p class="trip-info__cost">
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${pricesPoints}</span>
+            </p>
+          </section>`) : (
     `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
               <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
