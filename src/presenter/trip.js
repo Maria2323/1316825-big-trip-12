@@ -11,15 +11,16 @@ export default class Trip {
     this._sortComponent = new SortView();
     this._eventListComponent = new EventListView(arrayFromEvents);
     this._noPointsComponent = new NoPointsView();
-    this._dayContainers = new EventListView(arrayFromEvents).getDayContainers();
+    this._dayContainers = this._eventListComponent.getDayContainers();
     this._arrayFromEvents = arrayFromEvents;
   }
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
+    this._renderTripContainer();
   }
   _renderSort() {
-    render(this._tripContainerComponent, this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._tripContainerComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
   _renderEvent(dayContainer, event) {
     const eventComponent = new EventView(event);
