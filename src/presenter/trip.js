@@ -11,6 +11,8 @@ export default class Trip {
     this._sortComponent = new SortView();
     this._eventListComponent = new EventListView(arrayFromEvents);
     this._noPointsComponent = new NoPointsView();
+    this._dayContainers = new EventListView(arrayFromEvents).getDayContainers();
+    this._arrayFromEvents = arrayFromEvents;
   }
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
@@ -19,7 +21,7 @@ export default class Trip {
   _renderSort() {
     render(this._tripContainerComponent, this._sortComponent, RenderPosition.BEFOREEND);
   }
-  _renderEvent(event) {
+  _renderEvent(dayContainer, event) {
     const eventComponent = new EventView(event);
     const eventEditComponent = new EventEditView(event);
 
@@ -63,13 +65,14 @@ export default class Trip {
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-    render(this._eventListComponent, eventComponent, RenderPosition.BEFOREEND);
+    render(dayContainer, eventComponent, RenderPosition.BEFOREEND);
   }
   _renderEvents(from, to) {
     this._tripEvents
       .slice(from, to)
       .forEach((tripEvent) => this._renderEvent(tripEvent));
   }
+
   _renderNoPoints() {
     render(this._tripContainerComponent, this._noPointsComponent, RenderPosition.BEFOREEND);
   }
@@ -80,6 +83,10 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderEvents();
+    Array.from(this._dayContainers).forEach((dayContainer, index) => {
+      for (let i = 0; i < this._arrayFromEvents[index].points.length; i++) {
+        this._renderEvent(dayContainer, this._arrayFromEvents[index].points[i]);
+      }
+    });
   }
 }

@@ -40,4 +40,7 @@ export default class EventList extends AbstractView {
   getTemplate() {
     return createEventsListTemplate(this._event);
   }
+  getDayContainers() {
+    return this.getElement().querySelectorAll(`.trip-events__list`);
+  }
 }
