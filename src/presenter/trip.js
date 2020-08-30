@@ -4,6 +4,8 @@ import EventEditView from "../view/event-edit.js";
 import EventView from "../view/event.js";
 import NoPointsView from "../view/no-points.js";
 import {RenderPosition, render, replace} from "../utils/render.js";
+import {SortType} from "../const.js";
+import {sortEventsPrice, sortEventsTime} from "../utils/utils.js";
 
 export default class Trip {
   constructor(tripContainerComponent, arrayFromEvents) {
@@ -13,14 +15,38 @@ export default class Trip {
     this._noPointsComponent = new NoPointsView();
     this._dayContainers = this._eventListComponent.getDayContainers();
     this._arrayFromEvents = arrayFromEvents;
+    this._currentSortType = SortType.EVENT;
   }
+
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
+    this._sourcedTripEvents = tripEvents.slice();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
     this._renderTripContainer();
   }
+
+  _eventsSort(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    switch (sortType) {
+      case SortType.PRICE:
+        this._tripEvents.sort(sortEventsPrice);
+        break;
+      case SortType.TIME:
+        this._tripEvents.sort(sortEventsTime);
+        break;
+      default:
+        this._tripEvents = this._sourcedTripEvents.slice();
+    }
+    this._currentSortType = sortType;
+  }
+  _handleSortTypeChange(sortType) {
+    this._eventsSort(sortType);
+  }
   _renderSort() {
     render(this._tripContainerComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
   _renderEvent(dayContainer, event) {
     const eventComponent = new EventView(event);
