@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomElementFromArray} from "../utils.js";
+import {getRandomInt, getRandomElementFromArray} from "../utils/utils.js";
 import {types, cities, descriptions} from "../const.js";
 import {generateOffers} from "./offers";
 

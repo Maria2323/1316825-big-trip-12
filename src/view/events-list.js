@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const getDateMonthYear = (dates) => {
   let arrayFromEventsDates = dates.map(({year, month, date}) => year + `-` + month.toString().padStart(2, `0`) + `-` + date);
@@ -32,23 +32,15 @@ const createEventsListTemplate = (date) => {
   );
 };
 
-export default class EventList {
+export default class EventList extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
   getTemplate() {
     return createEventsListTemplate(this._event);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  getDayContainers() {
+    return this.getElement().querySelectorAll(`.trip-events__list`);
   }
 }
