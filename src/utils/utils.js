@@ -38,6 +38,5 @@ export const sortEventsTime = (eventA, eventB) => {
   if (weight !== null) {
     return weight;
   }
-
   return (eventB.endDate - eventB.startDate) - (eventA.endDate - eventA.startDate);
 };
