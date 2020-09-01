@@ -4,6 +4,7 @@ import EventEditView from "../view/event-edit.js";
 import EventView from "../view/event.js";
 import NoPointsView from "../view/no-points.js";
 import SortEventListView from "../view/sort-events-list.js";
+import ListForSortEventsView from "../view/list-for-sorted-events.js";
 import {RenderPosition, render, replace} from "../utils/render.js";
 import {SortType} from "../const.js";
 import {sortEventsPrice, sortEventsTime} from "../utils/utils.js";
@@ -14,7 +15,8 @@ export default class Trip {
     this._sortComponent = new SortView();
     this._eventListComponent = new EventListView(arrayFromEvents);
     this._eventsSortListComponent = new SortEventListView();
-    this._eventListSort = this._eventsSortListComponent.getElement().querySelector(`.trip-events__list`);
+    this._listForSortEventsComponent = new ListForSortEventsView();
+    this._eventListSort = this._listForSortEventsComponent.getElement().querySelector(`.trip-events__list`);
     this._noPointsComponent = new NoPointsView();
     this._dayContainers = this._eventListComponent.getDayContainers();
     this._arrayFromEvents = arrayFromEvents;
@@ -51,6 +53,7 @@ export default class Trip {
     this._eventsSort(sortType);
     this._clearEventsList();
     render(this._tripContainerComponent, this._eventsSortListComponent, RenderPosition.BEFOREEND);
+    render(this._tripContainerComponent, this._listForSortEventsComponent, RenderPosition.BEFOREEND);
     this._renderEvents();
   }
 
@@ -108,7 +111,7 @@ export default class Trip {
   _renderEvents(from, to) {
     this._tripEvents
       .slice(from, to)
-      .forEach((tripEvent) => this._renderEvent(this._tripContainerComponent, tripEvent));
+      .forEach((tripEvent) => this._renderEvent(this._eventListSort, tripEvent));
   }
 
   _renderNoPoints() {

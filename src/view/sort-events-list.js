@@ -10,7 +10,7 @@ const createSortEventsListTemplate = () => {
             </div>
 
             <div class="trip-sort__item  trip-sort__item--time">
-              <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" checked>
+              <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
               <label class="trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase" for="sort-time">
                 Time
               </label>
@@ -24,16 +24,7 @@ const createSortEventsListTemplate = () => {
             </div>
 
             <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
-          </form>
-
-          <ul class="trip-days">
-            <li class="trip-days__item  day">
-              <div class="day__info"></div>
-
-              <ul class="trip-events__list">
-              </ul>
-            </li>
-          </ul>`;
+          </form>`;
 };
 
 export default class SortEventList extends AbstractView {
