@@ -62,4 +62,7 @@ export default class Sort extends AbstractView {
     this._callback.sortTypeChange = callback;
     this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
+  setSomeMarkup(text) {
+    this.getElement().querySelector(`.trip-sort__item--day`).innerHTML = text;
+  }
 }
