@@ -6,7 +6,7 @@ export const getRandomElementFromArray = (array) => {
   const randomIndex = getRandomInt(0, array.length - 1);
   return array[randomIndex];
 };
-const getWeightForNullPrice = (priceA, priceB) => {
+const getWeightForNull = (priceA, priceB) => {
   if (priceA === null && priceB === null) {
     return 0;
   }
@@ -23,7 +23,7 @@ const getWeightForNullPrice = (priceA, priceB) => {
 };
 
 export const sortEventsPrice = (eventA, eventB) => {
-  const weight = getWeightForNullPrice(eventA.price, eventB.price);
+  const weight = getWeightForNull(eventA.price, eventB.price);
 
   if (weight !== null) {
     return weight;
@@ -33,7 +33,7 @@ export const sortEventsPrice = (eventA, eventB) => {
 };
 
 export const sortEventsTime = (eventA, eventB) => {
-  const weight = getWeightForNullPrice((eventA.endDate - eventA.startDate), (eventB.endDate - eventB.startDate));
+  const weight = getWeightForNull((eventA.endDate - eventA.startDate), (eventB.endDate - eventB.startDate));
 
   if (weight !== null) {
     return weight;

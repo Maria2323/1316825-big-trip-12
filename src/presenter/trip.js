@@ -22,23 +22,22 @@ export default class Trip {
   init(tripEvents) {
     this._renderedEvents = this._arrayFromEvents;
     this._tripEvents = tripEvents.slice();
-    this._sourcedTripEvents = tripEvents.slice();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
-    this._renderTripContainer();
     this._renderSort();
+    this._renderTripContainer();
     this._sortComponent.setSomeMarkup(`day`);
   }
 
   _eventsSort(sortType) {
     switch (sortType) {
       case SortType.PRICE:
-        this._renderedEvents = [{points: this._tripEvents.sort(sortEventsPrice), day: ``, month: ``}];
+        this._renderedEvents = [{points: this._tripEvents.sort(sortEventsPrice), date: ``, month: ``}];
         break;
       case SortType.TIME:
-        this._renderedEvents = [{points: this._tripEvents.sort(sortEventsTime), day: ``, month: ``}];
+        this._renderedEvents = [{points: this._tripEvents.sort(sortEventsTime), date: ``, month: ``}];
         break;
       default:
-        this._tripEvents = this._sourcedTripEvents.slice();
+        this._renderedEvents = this._arrayFromEvents.slice();
     }
     this._currentSortType = sortType;
   }
@@ -50,9 +49,10 @@ export default class Trip {
     this._eventsSort(sortType);
     this._clearEventsList();
     this._eventListComponent = new EventListView(this._renderedEvents);
-    this._dayContainers = this._eventListComponent.getDayContainers();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
+    this._dayContainers = this._eventListComponent.getDayContainers();
     this._sortComponent.setSomeMarkup(``);
+    this._renderTripContainer();
   }
 
   _renderSort() {
