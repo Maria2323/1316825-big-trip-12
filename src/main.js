@@ -13,30 +13,6 @@ events.sort((a, b) => {
   return a.startDate - b.startDate;
 });
 
-const arrayFromEvents = [];
-const counter = {
-  date: ``,
-  month: ``,
-  year: ``
-};
-for (let i = 0; i < events.length; i++) {
-  if (events[i].startDate.getFullYear() === counter.year
-    && events[i].startDate.getMonth() === counter.month
-    && events[i].startDate.getDate() === counter.date) {
-    arrayFromEvents[arrayFromEvents.length - 1].points.push(events[i]);
-  } else {
-    counter.date = events[i].startDate.getDate();
-    counter.month = events[i].startDate.getMonth();
-    counter.year = events[i].startDate.getFullYear();
-    arrayFromEvents.push(Object({
-      year: events[i].startDate.getFullYear(),
-      month: events[i].startDate.getMonth(),
-      date: events[i].startDate.getDate(),
-      points: [events[i]]
-    }));
-  }
-}
-
 const mainHeaderElement = document.querySelector(`.trip-main`);
 const menuAndFilterElement = mainHeaderElement.querySelector(`.trip-main__trip-controls`);
 
@@ -47,5 +23,5 @@ render(menuAndFilterElement, new FilterView(), RenderPosition.BEFOREEND);
 const pageMainElement = document.querySelector(`.page-body__page-main`);
 const tripEventsElements = pageMainElement.querySelector(`.trip-events`);
 
-const tripContainerElement = new TripPresenter(tripEventsElements, arrayFromEvents);
+const tripContainerElement = new TripPresenter(tripEventsElements);
 tripContainerElement.init(events);

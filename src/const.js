@@ -45,3 +45,8 @@ export const descriptions = [
   `In rutrum ac purus sit amet tempus.`,
 ];
 export const MIN_COUNT_FOR_DATES = 9;
+export const SortType = {
+  TIME: `time`,
+  PRICE: `price`,
+  EVENT: `event`
+};
