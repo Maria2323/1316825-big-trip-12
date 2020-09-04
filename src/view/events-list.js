@@ -14,7 +14,7 @@ const getDate = (dates) => {
 
 const createEventsListTemplate = (date) => {
   let eventListTemplate = ``;
-  for (let i = 0; i < getDateMonthYear(date).length; i++) {
+  for (let i = 0; i < date.length; i++) {
     eventListTemplate += `<li class="trip-days__item  day">
       <div class="day__info">
       <span class="day__counter">${date[i].date ? i + 1 : ``}</span>
