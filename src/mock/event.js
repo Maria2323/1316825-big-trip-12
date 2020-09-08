@@ -2,6 +2,8 @@ import {getRandomInt, getRandomElementFromArray} from "../utils/utils.js";
 import {types, cities, descriptions} from "../const.js";
 import {generateOffers} from "./offers";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generatePrice = () => {
   return Math.ceil(getRandomInt(30, 150));
 };
@@ -34,6 +36,7 @@ const getRandomDate = () => {
 
 export const generateEvent = () => {
   return {
+    id: generateId(),
     type: getRandomElementFromArray(types),
     city: getRandomElementFromArray(cities),
     offers: generateOffers(),

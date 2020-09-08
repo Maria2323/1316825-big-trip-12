@@ -1,11 +1,10 @@
 import SortView from "../view/sort.js";
+import EventPresenter from "../presenter/event.js";
 import EventListView from "../view/events-list.js";
-import EventEditView from "../view/event-edit.js";
-import EventView from "../view/event.js";
 import NoPointsView from "../view/no-points.js";
-import {RenderPosition, render, replace} from "../utils/render.js";
+import {RenderPosition, render} from "../utils/render.js";
 import {SortType} from "../const.js";
-import {sortEventsPrice, sortEventsTime} from "../utils/utils.js";
+import {sortEventsPrice, sortEventsTime, updateItem} from "../utils/utils.js";
 import {events} from "../main";
 
 export const createSortedEvents = () => {
@@ -38,6 +37,7 @@ export const createSortedEvents = () => {
 export default class Trip {
   constructor(tripContainerComponent) {
     this._tripContainerComponent = tripContainerComponent;
+    this._eventPresenter = {};
     this._sortComponent = new SortView();
     this._sortedEvents = createSortedEvents();
     this._eventListComponent = new EventListView(this._sortedEvents);
@@ -45,16 +45,25 @@ export default class Trip {
     this._dayContainers = this._eventListComponent.getDayContainers();
     this._currentSortType = SortType.EVENT;
     this.handleSortTypeChange = this.handleSortTypeChange.bind(this);
+    this._handleTaskChange = this._handleTaskChange.bind(this);
   }
 
   init(tripEvents) {
     this._renderedEvents = this._sortedEvents;
     this._tripEvents = tripEvents.slice();
+    this._sourcedTripEvents = tripEvents.slice();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
     this._renderSort();
     this._renderTripContainer();
     this._sortComponent.setDayText(`day`);
   }
+
+  _handleTaskChange(updatedTask) {
+    this._tripEvents = updateItem(this._tripEvents, updatedTask);
+    this._sourcedTripEvents = updateItem(this._sourcedTripEvents, updatedTask);
+    this._eventPresenter[updatedTask.id].init(updatedTask);
+  }
+
 
   _eventsSort(sortType) {
     switch (sortType) {
@@ -89,50 +98,9 @@ export default class Trip {
   }
 
   _renderEvent(dayContainer, event) {
-    const eventComponent = new EventView(event);
-    const eventEditComponent = new EventEditView(event);
-
-    const replaceEventToForm = () => {
-      replace(eventEditComponent, eventComponent);
-    };
-
-    const replaceFormToEvent = () => {
-      replace(eventComponent, eventEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        replaceFormToEvent();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const closeEventEdit = () => {
-      const openedEventEdit = document.querySelector(`.opened`);
-      if (openedEventEdit) {
-        replaceFormToEvent();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    eventComponent.setEditClickHandler(() => {
-      closeEventEdit();
-      replaceEventToForm();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    eventEditComponent.setEditClickHandler(() => {
-      replaceFormToEvent();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    eventEditComponent.setFormSubmitHandler(() => {
-      replaceFormToEvent();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    render(dayContainer, eventComponent, RenderPosition.BEFOREEND);
+    const eventPresenter = new EventPresenter(dayContainer, this._handleTaskChange);
+    eventPresenter.init(event);
+    this._eventPresenter[event.id] = eventPresenter;
   }
 
   _renderNoPoints() {
