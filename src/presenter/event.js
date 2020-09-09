@@ -21,9 +21,8 @@ export default class Event {
     const prevEventEditComponent = this._eventEditComponent;
     this._eventComponent = new EventView(event);
     this._eventEditComponent = new EventEditView(event);
-
     this._eventComponent.setEditClickHandler(this._handleEditClick);
-    this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._eventEditComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setEditClickHandler(this._handleEditClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
@@ -32,11 +31,11 @@ export default class Event {
       return;
     }
 
-    if (this._tripContainerComponent.getElement().contains(prevEventComponent.getElement())) {
+    if (this._tripContainerComponent.contains(prevEventComponent.getElement())) {
       replace(this._eventComponent, prevEventComponent);
     }
 
-    if (this._tripContainerComponent.getElement().contains(prevEventEditComponent.getElement())) {
+    if (this._tripContainerComponent.contains(prevEventEditComponent.getElement())) {
       replace(this._eventEditComponent, prevEventEditComponent);
     }
 

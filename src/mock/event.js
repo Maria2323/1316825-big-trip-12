@@ -40,7 +40,7 @@ export const generateEvent = () => {
     type: getRandomElementFromArray(types),
     city: getRandomElementFromArray(cities),
     offers: generateOffers(),
-    isFavorite: Boolean(getRandomInt(0, 1)),
+    isFavorite: (Math.floor(Math.random() * 2) === 0),
     price: generatePrice(),
     startDate: getRandomDate(),
     endDate: getRandomDate(),
