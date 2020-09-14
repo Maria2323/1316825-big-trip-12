@@ -2,6 +2,7 @@ import EventEditView from "../view/event-edit.js";
 import EventView from "../view/event.js";
 import {RenderPosition, render, replace} from "../utils/render.js";
 import {remove} from "../utils/utils.js";
+import observer from "../utils/observer";
 
 export default class Event {
   constructor(tripContainerComponent, changeData) {
@@ -13,6 +14,7 @@ export default class Event {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._replaceFormToEvent = this._replaceFormToEvent.bind(this);
   }
 
   init(event) {
@@ -27,12 +29,12 @@ export default class Event {
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
-      render(this._tripContainerComponent, this._eventComponent, RenderPosition.BEFOREEND);
+      render(this._tripContainerComponent, this._eventComponent.getElement(), RenderPosition.BEFOREEND);
       return;
     }
 
     if (this._tripContainerComponent.contains(prevEventComponent.getElement())) {
-      replace(this._eventComponent, prevEventComponent);
+      replace(this._eventComponent.getElement(), prevEventComponent);
     }
 
     if (this._tripContainerComponent.contains(prevEventEditComponent.getElement())) {
@@ -56,16 +58,23 @@ export default class Event {
   }
 
   _handleEditClick() {
-    this._replaceEventToForm();
+    if (this._tripContainerComponent.contains(this._eventComponent.getElement())) {
+      this._replaceEventToForm();
+      return;
+    }
+    this._replaceFormToEvent();
   }
 
   _replaceEventToForm() {
-    replace(this._eventEditComponent, this._eventComponent);
+    observer.notify();
+    observer.addObserver(this._replaceFormToEvent);
+    replace(this._eventEditComponent, this._eventComponent.getElement());
     document.addEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   _replaceFormToEvent() {
-    replace(this._eventComponent, this._eventEditComponent);
+    observer.removeObserver(this._replaceFormToEvent);
+    replace(this._eventComponent.getElement(), this._eventEditComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 

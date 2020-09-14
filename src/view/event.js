@@ -2,10 +2,10 @@ import {MIN_COUNT_FOR_DATES} from "../const.js";
 import AbstractView from "./abstract.js";
 
 const createOfferTemplate = (offers) => {
-  return offers.slice(0, 3).map(({name, price}) => `<li class="event__offer">
-    <span class="event__offer-title">${name}</span>
+  return offers.slice(0, 3).map((offer) => `<li class="event__offer">
+    <span class="event__offer-title">${offer.fullTitle}</span>
     &plus;
-&euro;&nbsp;<span class="event__offer-price">${price}</span>
+&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
     </li>`).join(``);
 };
 
@@ -68,7 +68,8 @@ const generateTime = (date) => {
 };
 
 const createEventTemplate = (event) => {
-  const {type, city, destination, price, offers, startDate, endDate} = event;
+  const {type, destination, price, offers, startDate, endDate} = event;
+  const {city} = destination;
   let eventTypeArticle = ``;
   switch (type) {
     case `Taxi`:
@@ -97,7 +98,7 @@ const createEventTemplate = (event) => {
     `<li class="trip-events__item">
                   <div class="event">
                     <div class="event__type">
-                      <img class="event__type-icon" width="42" height="42" src=${destination.image} alt="Event type icon">
+                      <img class="event__type-icon" width="42" height="42" src=${destination.images} alt="Event type icon">
                     </div>
                     <h3 class="event__title">${type} ${eventTypeArticle} ${city}</h3>
 

@@ -1,13 +1,13 @@
-import {events} from "../main.js";
+import {points} from "../mock/point.js";
 import AbstractView from "./abstract.js";
 
 const createTripInfoTemplate = () => {
-  const pricesPoints = events.length === 0 ? 0 : events.map(({price, offers}) => price + offers.reduce((a, b) => {
+  const pricesPoints = points.length === 0 ? 0 : points.map(({price, offers}) => price + offers.reduce((a, b) => {
     return (a.price || 0) + (b.price || 0);
   }, 0)).reduce((a, b) => {
     return a + b;
   });
-  return events.length === 0 ? (
+  return points.length === 0 ? (
     `<section class="trip-main__trip-info  trip-info">
            <p class="trip-info__cost">
               Total: &euro;&nbsp;<span class="trip-info__cost-value">${pricesPoints}</span>

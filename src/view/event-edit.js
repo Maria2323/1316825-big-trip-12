@@ -1,5 +1,10 @@
+import {OFFERS, CITIES, destinations, getOffersByPointType} from '../mock/point';
 import {MIN_COUNT_FOR_DATES} from "../const.js";
 import AbstractView from "./abstract.js";
+
+const availableCities = destinations.map((destination) => {
+  return destination.city;
+});
 
 const typesTransfer = [
   `Taxi`,
@@ -18,12 +23,12 @@ const typesActivity = [
 ];
 
 const createEventEditOfferTemplate = (offers) => {
-  return offers.map(({name, price, className}) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${offers === name ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-${className}-1">
-    <span class="event__offer-title">${name}</span>
+  return offers.map((offer) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" ${offers === offer.fullTitle ? `checked` : ``}>
+    <label class="event__offer-label" for="event-offer-${offer.title}-1">
+    <span class="event__offer-title">${offer.fullTitle}</span>
     &plus;
-&euro;&nbsp;<span class="event__offer-price">${price}</span>
+&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
     </label>
     </div>`).join(``);
 };
@@ -58,7 +63,7 @@ const generateEndDate = (date) => {
   const endMonth = date.getMonth();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 3);
+  const endDay = date.getDate();
   if (endMonth <= MIN_COUNT_FOR_DATES) {
     return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;
   } else {
@@ -67,7 +72,7 @@ const generateEndDate = (date) => {
 };
 
 const createEventEditTemplate = (event) => {
-  const {type, city, destination, offers, price, startDate, endDate, isFavorite} = event;
+  const {type, destination, offers, price, startDate, endDate, isFavorite} = event;
   let eventTypeArticle = ``;
   switch (type) {
     case `Taxi`:
@@ -85,7 +90,7 @@ const createEventEditTemplate = (event) => {
       eventTypeArticle = `in`;
       break;
   }
-
+  const iconType = `${type}.png`;
   const offerTemplate = createEventEditOfferTemplate(offers);
   const typeTransferTemplate = createEventEditTypeTransferTemplate(type);
   const typeActivityTemplate = createEventEditTypeActivityTemplate(type);
@@ -100,7 +105,7 @@ const createEventEditTemplate = (event) => {
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src=${destination.image} alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${iconType}" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -125,7 +130,7 @@ const createEventEditTemplate = (event) => {
                         <label class="event__label  event__type-output" for="event-destination-1">
                            ${type} ${eventTypeArticle}
                         </label>
-                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.city}" list="destination-list-1">
                         <datalist id="destination-list-1">
                           <option value="Amsterdam"></option>
                           <option value="Geneva"></option>
@@ -196,6 +201,32 @@ export default class EventEdit extends AbstractView {
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
+
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._event = Object.assign(
+        {},
+        this._event,
+        update
+    );
+
+    this.updateElement();
+  }
+
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+    prevElement = null;
+  }
+
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(this._event);

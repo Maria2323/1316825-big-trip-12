@@ -5,7 +5,7 @@ import NoPointsView from "../view/no-points.js";
 import {RenderPosition, render} from "../utils/render.js";
 import {SortType} from "../const.js";
 import {sortEventsPrice, sortEventsTime, updateItem} from "../utils/utils.js";
-import {events} from "../main";
+import {points} from "../mock/point.js";
 
 export const createSortedEvents = () => {
   const sortedEvents = [];
@@ -14,20 +14,20 @@ export const createSortedEvents = () => {
     month: ``,
     year: ``
   };
-  for (let i = 0; i < events.length; i++) {
-    if (events[i].startDate.getFullYear() === counter.year
-      && events[i].startDate.getMonth() === counter.month
-      && events[i].startDate.getDate() === counter.date) {
-      sortedEvents[sortedEvents.length - 1].points.push(events[i]);
+  for (let i = 0; i < points.length; i++) {
+    if (points[i].startDate.getFullYear() === counter.year
+      && points[i].startDate.getMonth() === counter.month
+      && points[i].startDate.getDate() === counter.date) {
+      sortedEvents[sortedEvents.length - 1].points.push(points[i]);
     } else {
-      counter.date = events[i].startDate.getDate();
-      counter.month = events[i].startDate.getMonth();
-      counter.year = events[i].startDate.getFullYear();
+      counter.date = points[i].startDate.getDate();
+      counter.month = points[i].startDate.getMonth();
+      counter.year = points[i].startDate.getFullYear();
       sortedEvents.push(Object({
-        year: events[i].startDate.getFullYear(),
-        month: events[i].startDate.getMonth(),
-        date: events[i].startDate.getDate(),
-        points: [events[i]]
+        year: points[i].startDate.getFullYear(),
+        month: points[i].startDate.getMonth(),
+        date: points[i].startDate.getDate(),
+        points: [points[i]]
       }));
     }
   }
@@ -49,9 +49,8 @@ export default class Trip {
   }
 
   init(tripEvents) {
-    this._renderedEvents = this._sortedEvents;
+    this._renderedEvents = this._sortedEvents.slice();
     this._tripEvents = tripEvents.slice();
-    this._sourcedTripEvents = tripEvents.slice();
     render(this._tripContainerComponent, this._eventListComponent, RenderPosition.BEFOREEND);
     this._renderSort();
     this._renderTripContainer();
@@ -60,7 +59,7 @@ export default class Trip {
 
   _handleTaskChange(updatedTask) {
     this._tripEvents = updateItem(this._tripEvents, updatedTask);
-    this._sourcedTripEvents = updateItem(this._sourcedTripEvents, updatedTask);
+    this._renderedEvents = updateItem(this._renderedEvents, updatedTask);
     this._eventPresenter[updatedTask.id].init(updatedTask);
   }
 
