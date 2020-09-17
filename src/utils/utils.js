@@ -1,3 +1,5 @@
+import Abstract from "../view/abstract";
+
 export const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -39,4 +41,26 @@ export const sortEventsTime = (eventA, eventB) => {
     return weight;
   }
   return (eventB.endDate - eventB.startDate) - (eventA.endDate - eventA.startDate);
+};
+export const remove = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error(`Can remove only components`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1)
+  ];
 };

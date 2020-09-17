@@ -2,12 +2,8 @@ import TripInfoView from "./view/trip-info.js";
 import MenuView from "./view/menu.js";
 import FilterView from "./view/filter.js";
 import TripPresenter from "./presenter/trip.js";
-import {generateEvent} from "./mock/event.js";
+import {points as events} from "./mock/point.js";
 import {RenderPosition, render} from "./utils/render.js";
-
-const EVENTS_COUNT = 20;
-
-export const events = new Array(EVENTS_COUNT).fill().map(generateEvent);
 
 events.sort((a, b) => {
   return a.startDate - b.startDate;

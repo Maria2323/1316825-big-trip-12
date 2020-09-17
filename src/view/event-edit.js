@@ -1,5 +1,10 @@
 import {MIN_COUNT_FOR_DATES} from "../const.js";
-import AbstractView from "./abstract.js";
+import {getOffersByPointType, destinations} from "../mock/point";
+import SmartView from "./smart";
+
+const availableCities = destinations.map((destination) => {
+  return destination.city;
+});
 
 const typesTransfer = [
   `Taxi`,
@@ -18,26 +23,26 @@ const typesActivity = [
 ];
 
 const createEventEditOfferTemplate = (offers) => {
-  return offers.map(({name, price, className}) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${className}-1" type="checkbox" name="event-offer-${className}" ${offers === name ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-${className}-1">
-    <span class="event__offer-title">${name}</span>
+  return offers.map((offer) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" ${offers === offer.fullTitle ? `checked` : ``}>
+    <label class="event__offer-label" for="event-offer-${offer.title}-1">
+    <span class="event__offer-title">${offer.fullTitle}</span>
     &plus;
-&euro;&nbsp;<span class="event__offer-price">${price}</span>
+&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
     </label>
     </div>`).join(``);
 };
 
 const createEventEditTypeTransferTemplate = (currentType) => {
-  return typesTransfer.map((type) => `<div class="event__type-item">
-                              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? `checked` : ``}>
-                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+  return typesTransfer.map((type, index) => `<div class="event__type-item">
+                              <input id="event-type-${type.toLowerCase()}-${index + 1}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${currentType === type.toLowerCase() ? `checked` : ``}>
+                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${index + 1}">${type}</label>
                             </div>`).join(``);
 };
 const createEventEditTypeActivityTemplate = (currentType) => {
-  return typesActivity.map((type) => `<div class="event__type-item">
-                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? `checked` : ``}>
-                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+  return typesActivity.map((type, index) => `<div class="event__type-item">
+                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${currentType === type.toLowerCase() ? `checked` : ``}>
+                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${index + 1}">${type}</label>
                             </div>`).join(``);
 };
 
@@ -58,7 +63,7 @@ const generateEndDate = (date) => {
   const endMonth = date.getMonth();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 3);
+  const endDay = date.getDate();
   if (endMonth <= MIN_COUNT_FOR_DATES) {
     return endDay + `/` + `0` + (endMonth + 1) + `/` + endYear + ` ` + hours + `:` + minutes;
   } else {
@@ -66,31 +71,40 @@ const generateEndDate = (date) => {
   }
 };
 
+const getPhotosMarkup = (imageLinks) => {
+  return imageLinks.map((link) => {
+    return (
+      `<img class="event__photo" src="${link}" alt="Event photo">`
+    );
+  }).join(``);
+};
+
 const createEventEditTemplate = (event) => {
-  const {type, city, destination, offers, price, startDate, endDate} = event;
+  const {type, destination, offers, price, startDate, endDate, isFavorite} = event;
   let eventTypeArticle = ``;
   switch (type) {
-    case `Taxi`:
-    case `Bus`:
-    case `Train`:
-    case `Ship`:
-    case `Transport`:
-    case `Drive`:
-    case `Flight`:
+    case `taxi`:
+    case `bus`:
+    case `train`:
+    case `ship`:
+    case `transport`:
+    case `drive`:
+    case `flight`:
       eventTypeArticle = `to`;
       break;
-    case `Check-in`:
-    case `Sightseeing`:
-    case `Restaurant`:
+    case `check-in`:
+    case `sightseeing`:
+    case `restaurant`:
       eventTypeArticle = `in`;
       break;
   }
-
+  const iconType = `${type}.png`;
   const offerTemplate = createEventEditOfferTemplate(offers);
   const typeTransferTemplate = createEventEditTypeTransferTemplate(type);
   const typeActivityTemplate = createEventEditTypeActivityTemplate(type);
   const randomStartDate = generateStartDate(startDate);
   const randomEndDate = generateEndDate(endDate);
+  const favoriteChecked = isFavorite ? `checked` : ``;
 
   return (
     `<li class="trip-events__item opened">
@@ -99,7 +113,7 @@ const createEventEditTemplate = (event) => {
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src=${destination.image} alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${iconType}" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -124,7 +138,7 @@ const createEventEditTemplate = (event) => {
                         <label class="event__label  event__type-output" for="event-destination-1">
                            ${type} ${eventTypeArticle}
                         </label>
-                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.city}" list="destination-list-1">
                         <datalist id="destination-list-1">
                           <option value="Amsterdam"></option>
                           <option value="Geneva"></option>
@@ -155,7 +169,7 @@ const createEventEditTemplate = (event) => {
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                       <button class="event__reset-btn" type="reset">Delete</button>
 
-                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favoriteChecked}>
                       <label class="event__favorite-btn" for="event-favorite-1">
                         <span class="visually-hidden">Add to favorite</span>
                         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -178,25 +192,37 @@ const createEventEditTemplate = (event) => {
 
                         </div>
                       </section>
+                      <section class="event__section  event__section--destination">
+                        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                        <p class="event__destination-description">${destination.description}</p>
+                        <div class="event__photos-container">
+                           <div class="event__photos-tape">
+                             ${getPhotosMarkup(destination.images)}
+                          </div>
+                        </div>
+                      </section>
                     </section>
                   </form>
                 </li>`
   );
 };
 
-export default class EventEdit extends AbstractView {
+export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._event = event;
+    this._setInnerHandlers();
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
+
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._event);
   }
 
   setFormSubmitHandler(callback) {
@@ -208,8 +234,62 @@ export default class EventEdit extends AbstractView {
     this._callback.editClick();
   }
 
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-icon`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {
+      const target = evt.target;
+      const typeCheckbox = target && target.closest(`.event__type-input`) ? target : null;
+
+      if (typeCheckbox) {
+
+        const type = typeCheckbox.value;
+        const offers = getOffersByPointType(type);
+
+        this.updateData({
+          type,
+          offers
+        });
+      }
+    });
+
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, (evt) => {
+      const destinationInput = evt.currentTarget;
+
+      if (availableCities.includes(destinationInput.value)) {
+        const city = destinationInput.value;
+        const cityIndex = destinations.findIndex((destination) => {
+          return destination.city === city;
+        });
+        const destination = destinations[cityIndex];
+
+        this.updateData({
+          destination
+        });
+      }
+    });
+
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`click`, (evt) => {
+      const destinationInput = evt.currentTarget;
+
+      destinationInput.value = ``;
+    });
   }
 }
