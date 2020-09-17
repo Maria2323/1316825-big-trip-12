@@ -1,6 +1,6 @@
-import {OFFERS, CITIES, destinations, getOffersByPointType} from '../mock/point';
 import {MIN_COUNT_FOR_DATES} from "../const.js";
-import AbstractView from "./abstract.js";
+import {getOffersByPointType, destinations} from "../mock/point";
+import SmartView from "./smart";
 
 const availableCities = destinations.map((destination) => {
   return destination.city;
@@ -34,15 +34,15 @@ const createEventEditOfferTemplate = (offers) => {
 };
 
 const createEventEditTypeTransferTemplate = (currentType) => {
-  return typesTransfer.map((type) => `<div class="event__type-item">
-                              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? `checked` : ``}>
-                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+  return typesTransfer.map((type, index) => `<div class="event__type-item">
+                              <input id="event-type-${type.toLowerCase()}-${index + 1}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${currentType === type.toLowerCase() ? `checked` : ``}>
+                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${index + 1}">${type}</label>
                             </div>`).join(``);
 };
 const createEventEditTypeActivityTemplate = (currentType) => {
-  return typesActivity.map((type) => `<div class="event__type-item">
-                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? `checked` : ``}>
-                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+  return typesActivity.map((type, index) => `<div class="event__type-item">
+                              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${currentType === type.toLowerCase() ? `checked` : ``}>
+                              <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${index + 1}">${type}</label>
                             </div>`).join(``);
 };
 
@@ -71,22 +71,30 @@ const generateEndDate = (date) => {
   }
 };
 
+const getPhotosMarkup = (imageLinks) => {
+  return imageLinks.map((link) => {
+    return (
+      `<img class="event__photo" src="${link}" alt="Event photo">`
+    );
+  }).join(``);
+};
+
 const createEventEditTemplate = (event) => {
   const {type, destination, offers, price, startDate, endDate, isFavorite} = event;
   let eventTypeArticle = ``;
   switch (type) {
-    case `Taxi`:
-    case `Bus`:
-    case `Train`:
-    case `Ship`:
-    case `Transport`:
-    case `Drive`:
-    case `Flight`:
+    case `taxi`:
+    case `bus`:
+    case `train`:
+    case `ship`:
+    case `transport`:
+    case `drive`:
+    case `flight`:
       eventTypeArticle = `to`;
       break;
-    case `Check-in`:
-    case `Sightseeing`:
-    case `Restaurant`:
+    case `check-in`:
+    case `sightseeing`:
+    case `restaurant`:
       eventTypeArticle = `in`;
       break;
   }
@@ -184,47 +192,32 @@ const createEventEditTemplate = (event) => {
 
                         </div>
                       </section>
+                      <section class="event__section  event__section--destination">
+                        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                        <p class="event__destination-description">${destination.description}</p>
+                        <div class="event__photos-container">
+                           <div class="event__photos-tape">
+                             ${getPhotosMarkup(destination.images)}
+                          </div>
+                        </div>
+                      </section>
                     </section>
                   </form>
                 </li>`
   );
 };
 
-export default class EventEdit extends AbstractView {
+export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._event = event;
+    this._setInnerHandlers();
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
   getTemplate() {
     return createEventEditTemplate(this._event);
-  }
-
-  updateData(update) {
-    if (!update) {
-      return;
-    }
-
-    this._event = Object.assign(
-        {},
-        this._event,
-        update
-    );
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    prevElement = null;
   }
 
   _formSubmitHandler(evt) {
@@ -254,5 +247,49 @@ export default class EventEdit extends AbstractView {
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.getElement().querySelector(`.event__favorite-icon`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {
+      const target = evt.target;
+      const typeCheckbox = target && target.closest(`.event__type-input`) ? target : null;
+
+      if (typeCheckbox) {
+
+        const type = typeCheckbox.value;
+        const offers = getOffersByPointType(type);
+
+        this.updateData({
+          type,
+          offers
+        });
+      }
+    });
+
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, (evt) => {
+      const destinationInput = evt.currentTarget;
+
+      if (availableCities.includes(destinationInput.value)) {
+        const city = destinationInput.value;
+        const cityIndex = destinations.findIndex((destination) => {
+          return destination.city === city;
+        });
+        const destination = destinations[cityIndex];
+
+        this.updateData({
+          destination
+        });
+      }
+    });
+
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`click`, (evt) => {
+      const destinationInput = evt.currentTarget;
+
+      destinationInput.value = ``;
+    });
   }
 }

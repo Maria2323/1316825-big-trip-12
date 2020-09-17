@@ -8,7 +8,6 @@ export default {
       .filter((observerInStock) => observerInStock !== observer);
   },
   notify() {
-    console.log(this._observers);
     this._observers.forEach((observer) => observer());
   }
 };

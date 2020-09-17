@@ -30,14 +30,6 @@ const POINT_TYPES = [
   `restaurant`,
 ];
 
-const OFFERS = [
-  {title: `luggage`, fullTitle: `Add luggage`, price: 30},
-  {title: `comfort`, fullTitle: `Switch to comfort class`, price: 100},
-  {title: `meal`, fullTitle: `Add meal`, price: 15},
-  {title: `seats`, fullTitle: `Choose seats`, price: 5},
-  {title: `train`, fullTitle: `Travel by train`, price: 40},
-];
-
 const DESTINATION_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.
   Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.
   Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.
@@ -96,6 +88,7 @@ const getOffersByPointType = (pointType) => {
   return offersByPointTypes[pointTypeIndex].offers;
 };
 
+
 const destinations = CITIES.map((city) => {
   return {
     city,
@@ -132,4 +125,4 @@ const generatePoints = () => {
 
 const points = generatePoints();
 
-export {OFFERS, points, CITIES, destinations, getOffersByPointType};
+export {points, CITIES, destinations, getOffersByPointType};

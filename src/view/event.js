@@ -72,18 +72,18 @@ const createEventTemplate = (event) => {
   const {city} = destination;
   let eventTypeArticle = ``;
   switch (type) {
-    case `Taxi`:
-    case `Bus`:
-    case `Train`:
-    case `Ship`:
-    case `Transport`:
-    case `Drive`:
-    case `Flight`:
+    case `taxi`:
+    case `bus`:
+    case `train`:
+    case `ship`:
+    case `transport`:
+    case `drive`:
+    case `flight`:
       eventTypeArticle = `to`;
       break;
-    case `Check-in`:
-    case `Sightseeing`:
-    case `Restaurant`:
+    case `check-in`:
+    case `sightseeing`:
+    case `restaurant`:
       eventTypeArticle = `in`;
       break;
   }
