@@ -1,5 +1,6 @@
 import {MIN_COUNT_FOR_DATES} from "../const.js";
 import AbstractView from "./abstract.js";
+import moment from "moment";
 
 const createOfferTemplate = (offers) => {
   return offers.slice(0, 3).map((offer) => `<li class="event__offer">
@@ -15,17 +16,17 @@ const durationTimeDisplay = (endDate, startDate) => {
   const hours = new Date(duration).getHours();
   const minutes = new Date(duration).getMinutes();
   if (Math.floor(days) > 0 && Math.floor(hours) > 0) {
-    return Math.floor(days) + `D ` + Math.floor(hours) + `H ` + Math.floor(minutes) + `M`;
+    return moment(duration).format(`DD\\D\\ HH\\H\\:ii\\M\\`);
   } else if (Math.floor(days) <= 0 && Math.floor(hours) > 0) {
-    return Math.floor(hours) + `H ` + Math.floor(minutes) + `M`;
+    return moment(duration).format(`HH\\H\\:ii\\M\\`);
   } else if (Math.floor(days) <= 0 && Math.floor(hours) <= 0 && Math.floor(minutes) > 0) {
-    return Math.floor(minutes) + `M`;
+    return moment(duration).format(`ii\\M\\`);
   } else {
     return ``;
   }
 };
 
-const generateStartDate = (date) => {
+const generateDate = (date) => {
   const startYear = date.getFullYear();
   const startMonth = date.getMonth();
   const startDay = date.getDate();
@@ -41,22 +42,7 @@ const generateStartDate = (date) => {
     return startYear + `-` + startMonth + `-` + startDay + `T` + hours + `:` + minutes;
   }
 };
-const generateEndDate = (date) => {
-  const endYear = date.getFullYear();
-  const endMonth = date.getMonth();
-  const endDay = date.getDate() < 21 ? date.getDate() + Math.floor(Math.random() * 10) : date.getDate() + Math.floor(Math.random() * 5);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  if (endMonth <= MIN_COUNT_FOR_DATES && minutes > MIN_COUNT_FOR_DATES) {
-    return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
-  } else if (endMonth <= MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
-    return endYear + `-` + `0` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
-  } else if (endMonth > MIN_COUNT_FOR_DATES && minutes <= MIN_COUNT_FOR_DATES) {
-    return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + `0` + minutes;
-  } else {
-    return endYear + `-` + endMonth + `-` + endDay + `T` + hours + `:` + minutes;
-  }
-};
+
 const generateTime = (date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -88,8 +74,8 @@ const createEventTemplate = (event) => {
       break;
   }
 
-  const randomStartDate = generateStartDate(startDate);
-  const randomEndDate = generateEndDate(startDate);
+  const randomStartDate = generateDate(startDate);
+  const randomEndDate = generateDate(endDate);
   const randomStartTime = generateTime(startDate);
   const randomEndTime = generateTime(endDate);
   const durationTimeTemplate = durationTimeDisplay(endDate, startDate);
